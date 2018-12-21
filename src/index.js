@@ -5,10 +5,11 @@ import { GraphQLServer } from 'graphql-yoga'
 const typeDefs = `
     type Query {
         id: ID!
-        name: String!
-        age: Int!
-        employed: Boolean!
-        gpa: Float
+        title: String!
+        price: Float!
+        releaseYear: Int
+        rating: Float
+        inStock: Boolean!
     }
 `
 
@@ -20,20 +21,24 @@ const resolvers = {
             return 'abc123'
         },
 
-        name() {
-            return 'Ryan'
+        title() {
+            return 'Stuff'
         },
 
-        age() {
-            return 27
+        price() {
+            return 27.33
         },
 
-        employed() {
+        releaseYear() {
+            return 1999
+        },
+
+        rating() {
+            return 4.33
+        },
+
+        inStock() {
             return true
-        },
-
-        gpa() {
-            return null
         },
     },
 }
