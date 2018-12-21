@@ -4,7 +4,11 @@ const name = "Ryan";
 
 const location = 'Philadelphia'
 
-export { message, name, location as default };
+const getGreeting = name => {
+    return `Welcome to the course ${name}!`
+}
+
+export { message, name, getGreeting, location as default };
 
 /**
  * named exports - can have as many as needed
