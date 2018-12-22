@@ -1,17 +1,34 @@
 import { GraphQLServer } from 'graphql-yoga'
 
+// Demo user data
+const users = [
+    {
+        id: '1',
+        name: 'Ryan',
+        email: 'ryan@example.com'
+    },
+    {
+        id: '2',
+        name: 'Shiela',
+        email: 'shiela@example.com'
+    },
+    {
+        id: '3',
+        name: 'Tootie',
+        email: 'tootie@example.com'
+    }
+]
 // Type Definitions (schema)
 
 const typeDefs = `
     type Query {
-       add(numbers: [Float!]!): Float!
-       greeting(name: String, second: String): String! 
-       grades: [Int!]!
-       me: User!
-       post: Post!
+        users(query: String): [User!]!
+        me: User!
+        post: Post!
     }
+
     type User {
-        id: ID! 
+        id: ID!
         name: String!
         email: String!
         age: Int
@@ -21,7 +38,7 @@ const typeDefs = `
         id: ID!
         title: String!
         body: String!
-        published: Boolean!
+        published: Boolean
     }
 `
 
@@ -29,6 +46,18 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
+        users(parent, args, ctx, info) {
+            if (!args.query) {
+                return users
+            }
+
+            return users.filter(user => {
+                return user.name
+                    .toLowerCase()
+                    .includes(args.query.toLowerCase())
+            })
+        },
+
         me() {
             return {
                 id: '12345',
@@ -44,28 +73,6 @@ const resolvers = {
                 body: 'hey there',
                 published: false
             }
-        },
-
-        greeting(parent, args, context, info) {
-            if (args.name && args.second) {
-                return `Hello, ${args.name}! How is your ${args.second}`
-            } else if (args.name) {
-                return `Sup, ${args.name}`
-            } else {
-                return 'Hello!'
-            }
-        },
-
-        add(parent, args, ctx, info) {
-            if (args.numbers.length === 0) {
-                return 0
-            }
-
-            return args.numbers.reduce((a, b) => a + b)
-        },
-
-        grades(parent, args, ctx, info) {
-            return [99, 89, 39]
         }
     }
 }
