@@ -4,6 +4,7 @@ import { GraphQLServer } from 'graphql-yoga'
 
 const typeDefs = `
     type Query {
+       add(a: Float!, b: Float!): Float!
        greeting(name: String, second: String): String! 
        me: User!
        post: Post!
@@ -52,6 +53,14 @@ const resolvers = {
                 return `Sup, ${args.name}`
             } else {
                 return 'Hello!'
+            }
+        },
+
+        add(parent, args, ctx, info) {
+            if (args.a && args.b) {
+                return args.a + args.b
+            } else {
+                return 'Two numbers are required.  Please add one or both missing values.'
             }
         }
     }
