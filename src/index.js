@@ -4,8 +4,22 @@ import { GraphQLServer } from 'graphql-yoga'
 
 const typeDefs = `
     type Query {
+       me: User!
+       post: Post!
+    }
+
+    type User {
+        id: ID! 
         name: String!
-        age: Int!
+        email: String!
+        age: Int
+    }
+
+    type Post {
+        id: ID!
+        title: String!
+        body: String!
+        published: Boolean!
     }
 `
 
@@ -13,18 +27,28 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
-        name() {
-            return 'Ryan'
+        me() {
+            return {
+                id: '12345',
+                name: 'mike',
+                email: 'yo@yo.com'
+            }
         },
-        age() {
-            return 33
-        },
-    },
+
+        post() {
+            return {
+                id: '3333',
+                title: 'my post',
+                body: 'hey there',
+                published: false
+            }
+        }
+    }
 }
 
 const server = new GraphQLServer({
     typeDefs,
-    resolvers,
+    resolvers
 })
 
 server.start(() => {
