@@ -4,6 +4,7 @@ import { GraphQLServer } from 'graphql-yoga'
 
 const typeDefs = `
     type Query {
+       greeting(name: String, second: String): String! 
        me: User!
        post: Post!
     }
@@ -41,6 +42,16 @@ const resolvers = {
                 title: 'my post',
                 body: 'hey there',
                 published: false
+            }
+        },
+
+        greeting(parent, args, context, info) {
+            if (args.name && args.second) {
+                return `Hello, ${args.name}! How is your ${args.second}`
+            } else if (args.name) {
+                return `Sup, ${args.name}`
+            } else {
+                return 'Hello!'
             }
         }
     }
