@@ -1,4 +1,5 @@
 import { GraphQLServer } from 'graphql-yoga'
+import { cpus } from 'os'
 
 // Demo user data
 const users = [
@@ -46,19 +47,27 @@ const posts = [
 const comments = [
     {
         id: '28',
-        text: 'asdfe3'
+        text: 'asdfe3',
+        post: '11',
+        author: '1'
     },
     {
         id: '29',
-        text: 'dfgdfgdfgdfg'
+        text: 'dfgdfgdfgdfg',
+        post: '12',
+        author: '3'
     },
     {
         id: '30',
-        text: 'lorem ipsummmm'
+        text: 'lorem ipsummmm',
+        post: '12',
+        author: '3'
     },
     {
         id: '31',
-        text: 'aads3addsfasfe33333333333'
+        text: 'aads3addsfasfe33333333333',
+        post: '13',
+        author: '2'
     }
 ]
 // Type Definitions (schema)
@@ -70,6 +79,7 @@ const typeDefs = `
         comments: [Comment!]!
         me: User!
         post: Post!
+        comment: Comment!
     }
 
     type User {
@@ -78,6 +88,7 @@ const typeDefs = `
         email: String!
         age: Int
         posts: [Post!]!
+        comments: [Comment!]!
     }
 
     type Post {
@@ -86,12 +97,17 @@ const typeDefs = `
         body: String!
         published: Boolean
         author: User! 
+        comments: [Comment!]!
+        
         
     }
 
     type Comment {
         id: ID!
         text: String!
+        post: Post
+        author: User!
+        
     }
 `
 
@@ -145,18 +161,44 @@ const resolvers = {
                 body: 'hey there',
                 published: false
             }
+        },
+
+        comment() {
+            return {
+                id: '110',
+                text: 'yo yo yo',
+                post: '11'
+            }
         }
     },
 
     Post: {
         author(parent, args, ctx, info) {
             return users.find(user => user.id === parent.author)
+        },
+
+        comments(parent, args, ctx, info) {
+            return comments.filter(comment => comment.post === parent.id)
         }
     },
 
     User: {
         posts(parent, args, ctx, info) {
             return posts.filter(post => post.author === parent.id)
+        },
+
+        comments(parent, args, ctx, info) {
+            return comments.filter(comment => comment.author === parent.id)
+        }
+    },
+
+    Comment: {
+        post(parent, args, ctx, info) {
+            return posts.find(post => post.id === parent.post)
+        },
+
+        author(parent, args, ctx, info) {
+            return users.find(user => user.id === parent.author)
         }
     }
 }
