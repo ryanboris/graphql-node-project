@@ -57,11 +57,7 @@ const resolvers = {
         },
 
         add(parent, args, ctx, info) {
-            if (args.a && args.b) {
-                return args.a + args.b
-            } else {
-                return 'Two numbers are required.  Please add one or both missing values.'
-            }
+            return args.a + args.b
         }
     }
 }
