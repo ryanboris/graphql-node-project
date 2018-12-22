@@ -36,7 +36,7 @@ const posts = [
         author: '2'
     },
     {
-        id: '3',
+        id: '13',
         title: 'a post',
         body: 'another',
         published: true,
@@ -66,7 +66,7 @@ const comments = [
     {
         id: '31',
         text: 'aads3addsfasfe33333333333',
-        post: '13',
+        post: '12',
         author: '2'
     }
 ]
@@ -105,7 +105,7 @@ const typeDefs = `
     type Comment {
         id: ID!
         text: String!
-        post: Post
+        post: Post!
         author: User!
         
     }
