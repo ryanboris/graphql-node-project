@@ -18,11 +18,33 @@ const users = [
         email: 'tootie@example.com'
     }
 ]
+
+const posts = [
+    {
+        id: '1',
+        title: 'a post',
+        body: 'a body',
+        published: true
+    },
+    {
+        id: '2',
+        title: 'a post',
+        body: 'more',
+        published: false
+    },
+    {
+        id: '3',
+        title: 'a post',
+        body: 'another',
+        published: true
+    }
+]
 // Type Definitions (schema)
 
 const typeDefs = `
     type Query {
         users(query: String): [User!]!
+        posts(query: String): [Post!]!
         me: User!
         post: Post!
     }
@@ -46,6 +68,21 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
+        posts(parent, args, ctx, info) {
+            if (!args.query) {
+                return posts
+            }
+
+            return posts.filter(post => {
+                return (
+                    post.title
+                        .toLowerCase()
+                        .includes(args.query.toLowerCase()) ||
+                    post.body.toLowerCase().includes(args.query.toLowerCase())
+                )
+            })
+        },
+
         users(parent, args, ctx, info) {
             if (!args.query) {
                 return users
